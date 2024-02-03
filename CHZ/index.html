@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHZ</title>
+  <link rel="stylesheet" href="../style.css"></head>
+</head>
+<body>
+  <center>
+    <form id="myForm">
+      <label for="date">Date:</label><input type="number" id="date" required>
+      <label for="month-year">Month:</label><input type="month" id="month" required>
+      <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+  </center>
+  <table>
+    <td><div class="iframe-container2"><div id="dca"></div></div></td>
+    <td><div id="indicator"></div></td>
+    <td><div class="iframe-container"><iframe class="iframe-content" src="https://coincheckup.com/coins/chiliz/predictions" frameborder="0" scrolling="no"></iframe></div></td>
+  </table>
+<script>
+function submitForm() {
+  var dateValue = document.getElementById('date').value;
+  var monthValue = document.getElementById('month').value;
+  localStorage.setItem('date_CHZ', dateValue);
+  localStorage.setItem('month_CHZ', monthValue);
+  location.reload();
+}
+
+var currentDate = new Date();
+  var monthInput = document.getElementById('month');
+  var monthString = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  var yearMonthString = currentDate.getFullYear() + '-' + monthString;
+  monthInput.value = yearMonthString;
+
+  today = currentDate.getFullYear() + '-' + monthString + '-' + currentDate.getDate();
+  starter = localStorage.getItem('month_CHZ') + '-' + localStorage.getItem('date_CHZ')
+  ending = localStorage.getItem('month_CHZ') + '-' + (Number(localStorage.getItem('date_CHZ'))+9)
+
+  const date1 = new Date(today);
+  const date2 = new Date(ending);
+  if (date1 > date2){
+    document.getElementById('dca').innerHTML="<iframe class='iframe-content2' src='https://cryptodca.io/crypto-dca-calculator/?coin=chiliz&amount=10&frequency=daily&currency=usd&start="+ starter +"&end=" + ending + "' frameborder='0' scrolling='no'></iframe>"
+  } else {
+    document.getElementById('dca').innerHTML="<iframe class='iframe-content2' src='https://cryptodca.io/crypto-dca-calculator/?coin=chiliz&amount=10&frequency=daily&currency=usd&start="+ starter +"' frameborder='0' scrolling='no'></iframe>"
+  }
+
+var script = document.createElement('script');
+script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+script.async = true;
+script.innerHTML = `
+  {
+    "width": 790,
+    "height": 800,
+    "symbol": "BINANCE:CHZUSDT",
+    "interval": "D",
+    "timezone": "Etc/UTC",
+    "theme": "light",
+    "style": "1",
+    "locale": "en",
+    "enable_publishing": false,
+    "hide_top_toolbar": true,
+    "hide_legend": true,
+    "save_image": false,
+    "studies": [
+      "MoonPhases@tv-basicstudies",
+      "STD;MACD"
+    ],
+    "hide_volume": true
+  }
+`;
+document.getElementById('indicator').appendChild(script);
+</script>
+
+</body>
+</html>
